@@ -40,9 +40,10 @@ public class ex2_server
             String send = "";
             
             // reads message from client until "Over" is sent
+            final boolean[] continueReading = {true};
             new Thread(() -> {
                 String receive = "";
-                while (!(receive.equals("Over"))) {
+                while (!(receive.equals("Over")) && continueReading[0]) {
                     try {
                         // receive message
                         receive = receive_in.readUTF();
@@ -58,6 +59,9 @@ public class ex2_server
                     // send a response to the client
                     send = send_in.readLine();
                     send_out.writeUTF(send);
+                    if (send.equals("Over")) {
+                        continueReading[0] = false;
+                    }
                 } catch(IOException i) {
                     System.out.println(i);
                 }

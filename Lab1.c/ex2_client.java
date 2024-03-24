@@ -39,9 +39,10 @@ public class ex2_client {
         String send = "";
  
         // keep reading until "Over" is input
+        final boolean[] continueReading = {true};
         new Thread(() -> {
             String receive = "";
-            while (!(receive.equals("Over"))) {
+            while (!(receive.equals("Over")) && continueReading[0]) {
                 try {
                     // receive message
                     receive = receive_in.readUTF();
@@ -57,6 +58,9 @@ public class ex2_client {
                 // send a response to the client
                 send = send_in.readLine();
                 send_out.writeUTF(send);
+                if (send.equals("Over")) {
+                    continueReading[0] = false;
+                }
             } catch(IOException i) {
                 System.out.println(i);
             }
@@ -76,6 +80,6 @@ public class ex2_client {
  
     public static void main(String args[])
     {
-        ex2_client client = new ex2_client("127.0.0.1", 5000);
+        ex2_client client = new ex2_client("127.0.0.1", 1234);
     }
 }
